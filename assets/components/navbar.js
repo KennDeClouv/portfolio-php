@@ -92,59 +92,61 @@ nav.innerHTML = `
 </svg>
 <p id="soundOnText">On</p>
 <p id="soundOffText">Off</p>
-</div>`
-
+</div>`;
 
 // BURGER TOGGLE
 let ac = document.querySelector(".burger");
 let bc = document.querySelector(".burger-body");
 
-  ac.addEventListener("click", () => {
-    bc.classList.toggle("active");
-  });
+ac.addEventListener("click", () => {
+  bc.classList.toggle("active");
+});
 
-  document.addEventListener("click", function (e) {
-    if (!ac.contains(e.target) && !bc.contains(e.target)) {
-      bc.classList.remove("active");
-    }
-  });
+document.addEventListener("click", function (e) {
+  if (!ac.contains(e.target) && !bc.contains(e.target)) {
+    bc.classList.remove("active");
+  }
+});
 
-  // SOUND
+// SOUND
 
-  let sound = new Audio("assets/audio/sound1.mp3");
-  sound.loop = true;
-  const soundButton = document.querySelector(".sound-bar-wrapper");
+let sound = new Audio("assets/audio/sound1.mp3");
+sound.loop = true;
+const soundButton = document.querySelector(".sound-bar-wrapper");
 
-  soundButton.addEventListener("click", () => {
-    if (soundButton.classList.contains("on")) {
-      soundButton.classList.remove("on");
-      soundButton.classList.add("off");
-      sound.pause();
-      document.querySelector(".main-content").classList.remove("d-none");
-    } else {
-      soundButton.classList.add("on");
-      soundButton.classList.remove("off");
-      sound.play();
-      document.querySelector(".main-content").classList.add("d-none");
-    }
-  });
-  
+soundButton.addEventListener("click", () => {
+  if (soundButton.classList.contains("on")) {
+    soundButton.classList.remove("on");
+    soundButton.classList.add("off");
+    sound.pause();
+    document.querySelector(".main-content").classList.remove("d-none");
+  } else {
+    soundButton.classList.add("on");
+    soundButton.classList.remove("off");
+    sound.play();
+    document.querySelector(".main-content").classList.add("d-none");
+  }
+});
+
 let lastScrollTop = 0;
 
-  window.addEventListener("scroll", function () {
-    let currentScroll = window.scrollY || document.documentElement.scrollTop;
-  
-    // if (currentScroll > lastScrollTop) {
-    if (document.querySelector(".sound-bar-wrapper").classList.contains("on") == false && currentScroll > lastScrollTop) {
-      // Scrolling down
-      document.querySelector(".logo").classList.remove("logo-active")
-      document.querySelector(".sound-bar-wrapper").classList.remove("active");
-    } else {
-      // Scrolling up
-      document.querySelector(".logo").classList.add("logo-active");
-      document.querySelector(".sound-bar-wrapper").classList.add("active");
-    }
-  
-    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
-  });
-  
+window.addEventListener("scroll", function () {
+  let currentScroll = window.scrollY || document.documentElement.scrollTop;
+
+  // if (currentScroll > lastScrollTop) {
+  if (
+    document.querySelector(".sound-bar-wrapper").classList.contains("on") ==
+      false &&
+    currentScroll > lastScrollTop
+  ) {
+    // Scrolling down
+    document.querySelector(".logo").classList.remove("logo-active");
+    document.querySelector(".sound-bar-wrapper").classList.remove("active");
+  } else {
+    // Scrolling up
+    document.querySelector(".logo").classList.add("logo-active");
+    document.querySelector(".sound-bar-wrapper").classList.add("active");
+  }
+
+  lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+});

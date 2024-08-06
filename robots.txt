@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: 
+Disallow: /assets
+Disallow: /vendor
+Sitemap: https://kenndeclouv.rf.gd/assets/sitemap.xml

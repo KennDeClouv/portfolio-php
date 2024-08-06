@@ -21,6 +21,8 @@
 
 namespace PHPMailer\PHPMailer;
 
+use Psr\Log\LoggerInterface; // Added this line to import the LoggerInterface class
+
 /**
  * PHPMailer - PHP email creation and transport class.
  *
@@ -423,7 +425,7 @@ class PHPMailer
      *
      * @see SMTP::$Debugoutput
      *
-     * @var string|callable|\Psr\Log\LoggerInterface
+     * 
      */
     public $Debugoutput = 'echo';
 
@@ -895,7 +897,7 @@ class PHPMailer
             return;
         }
         //Is this a PSR-3 logger?
-        if ($this->Debugoutput instanceof \Psr\Log\LoggerInterface) {
+        if ($this->Debugoutput instanceof LoggerInterface) {
             $this->Debugoutput->debug($str);
 
             return;
@@ -4250,8 +4252,8 @@ class PHPMailer
      * Automatically inlines images and creates a plain-text version by converting the HTML,
      * overwriting any existing values in Body and AltBody.
      * Do not source $message content from user input!
-     * $basedir is prepended when handling relative URLs, e.g. <img src="/images/a.png"> and must not be empty
-     * will look for an image file in $basedir/images/a.png and convert it to inline.
+     * $basedir is prepended when handling relative URLs, e.g. <img src="/images/a.webp"> and must not be empty
+     * will look for an image file in $basedir/images/a.webp and convert it to inline.
      * If you don't provide a $basedir, relative paths will be left untouched (and thus probably break in email)
      * Converts data-uri images into embedded attachments.
      * If you don't want to apply these transformations to your HTML, just set Body and AltBody directly.
@@ -4764,22 +4766,10 @@ class PHPMailer
         $privKeyStr = !empty($this->DKIM_private_string) ?
             $this->DKIM_private_string :
             file_get_contents($this->DKIM_private);
-        if ('' !== $this->DKIM_passphrase) {
-            $privKey = openssl_pkey_get_private($privKeyStr, $this->DKIM_passphrase);
-        } else {
-            $privKey = openssl_pkey_get_private($privKeyStr);
-        }
+        $privKey = openssl_pkey_get_private($privKeyStr, $this->DKIM_passphrase ?? null);
         if (openssl_sign($signHeader, $signature, $privKey, 'sha256WithRSAEncryption')) {
-            if (\PHP_MAJOR_VERSION < 8) {
-                openssl_pkey_free($privKey);
-            }
-
             return base64_encode($signature);
         }
-        if (\PHP_MAJOR_VERSION < 8) {
-            openssl_pkey_free($privKey);
-        }
-
         return '';
     }
 
